@@ -123,18 +123,23 @@ async def on_message(message):
             df = pd.read_csv(csv_file, names=colNames, header=None)
             word = False
             under = message.content.lower()
+            
             for a in df["trigger"]:
                 if under == a:
                     df = df[df.trigger == str(under)]
                     for b in df["channel"]:
-                        if str(message.channel.id) == b:
-                            df = df[df.channel == str(message.channel.id)]
-                            index_y = int(
-                                df[df["trigger"] == str(under)].index.values[0])
-                            word = True
-                            csv_file.close()
-                            break
+                        if str(message.channel.id) == str(b).strip():
+                            matched = df[df["channel"].astype(str).str.strip() == str(message.channel.id)]
+                            if not matched.empty:
+                                index_y = int(matched.index.values[0])
+                                word = True
+                                csv_file.close()
+                               
+                                break
+                    break
+                #the trigger is found fine 
             if word:
+                
                 await message.channel.send(df.at[int(index_y), 'response'])
     except OSError as e:
         print(f"Error reading CSV: {e}")

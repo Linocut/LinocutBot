@@ -14,12 +14,12 @@ async def handle_delete(message):
                 if dtrig == a:
                     df = df[df.trigger == str(dtrig)]
                     for b in df["channel"]:
-                        if str(message.channel.id) == b:
-                            df = df[df.channel == str(message.channel.id)]
-                            index_arr = df[df["trigger"] == str(dtrig)].index.values
-                            index_y = int(index_arr[0]) if len(index_arr) > 0 else None
-                            word = True
-                            break
+                        if str(message.channel.id) == str(b).strip():
+                            matched = df[df["channel"].astype(str).str.strip() == str(message.channel.id)]
+                            if not matched.empty:
+                                index_y = int(matched.index.values[0])
+                                word = True
+                                break
             if word:
                 try:
                     with open(csv_path, 'r', encoding="utf8") as csv_file:
