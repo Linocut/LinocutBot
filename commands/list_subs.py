@@ -8,7 +8,7 @@ async def handle_list(message):
             triggerList = []
             colNames = ["trigger", "response", "channel"]
             df = pd.read_csv(csv_file, names=colNames, header=None)
-            df = df.loc[df['channel'] == str(message.channel.id)]
+            df = df.loc[df['channel'].astype(str).str.strip() == str(message.channel.id)]
             df = df['trigger']
             for x in df:
                 triggerList.append(x)

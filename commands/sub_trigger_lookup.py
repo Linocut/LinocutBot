@@ -21,7 +21,7 @@ async def handle_sub_trigger_lookup(message):
                 if message.channel.id == b:
                     df = df[df.channel == message.channel.id]
                     index_y = int(
-                        df[df["trigger"] == str(under)].index.values)
+                        df[df["trigger"] == str(under)].index.values[0])
                     wordInSub = True
                     break
     if wordInSub:
